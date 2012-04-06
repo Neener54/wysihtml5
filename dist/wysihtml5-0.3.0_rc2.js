@@ -5315,7 +5315,7 @@ wysihtml5.dom.replaceWithChildNodes = function(node) {
         "XMLHttpRequest", "XDomainRequest"
       ],
       /**
-       * Properties to unset/proetect on the document object
+       * Properties to unset/protect on the document object
        */
       documentProperties  = [
         "referrer",
@@ -6958,7 +6958,7 @@ wysihtml5.Commands = Base.extend(
  */
 (function(wysihtml5) {
   var undef,
-      REG_EXP = /wysiwyg-font-size-[a-z]+/g;
+      REG_EXP = /wysiwyg-font-size-[a-z\-]+/g;
   
   wysihtml5.commands.fontSize = {
     exec: function(composer, command, size) {
@@ -7441,18 +7441,11 @@ wysihtml5.Commands = Base.extend(
   };
 })(wysihtml5);(function(wysihtml5) {
   var undef,
-      LINE_BREAK = "<br>" + (wysihtml5.browser.needsSpaceAfterLineBreak() ? " " : "");
-  
+      LINE_BREAK = "<p>" + (wysihtml5.browser.needsSpaceAfterLineBreak() ? " " : "");
+
   wysihtml5.commands.insertLineBreak = {
     exec: function(composer, command) {
-      if (composer.commands.support(command)) {
-        composer.doc.execCommand(command, false, null);
-        if (!wysihtml5.browser.autoScrollsToCaret()) {
-          composer.selection.scrollIntoView();
-        }
-      } else {
-        composer.commands.exec("insertHTML", LINE_BREAK);
-      }
+      wysihtml5.commands.formatBlock.exec(composer, "formatBlock", "P", null, null);
     },
 
     state: function() {
@@ -7660,17 +7653,14 @@ wysihtml5.Commands = Base.extend(
     }
   };
 })(wysihtml5);(function(wysihtml5) {
-  var undef,
-      REG_EXP     = /wysiwyg-text-decoration-underline/g,
-      CLASS_NAME  = "wysiwyg-text-decoration-underline";
-  
+  var undef;
   wysihtml5.commands.underline = {
     exec: function(composer, command) {
-      return wysihtml5.commands.formatInline.exec(composer, command, "span", CLASS_NAME, REG_EXP);
+      return wysihtml5.commands.formatInline.exec(composer, command, "u");
     },
 
     state: function(composer, command) {
-      return wysihtml5.commands.formatInline.state(composer, command, "span", CLASS_NAME, REG_EXP);
+      return wysihtml5.commands.formatInline.state(composer, command, "u");
     },
 
     value: function() {
