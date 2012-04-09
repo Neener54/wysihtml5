@@ -17,7 +17,7 @@
         "73": "italic",   // I
         "85": "underline" // U
       };
-  
+
   wysihtml5.views.Composer.prototype.observe = function() {
     var that                = this,
         state               = this.getValue(),
@@ -57,7 +57,7 @@
       }
       that.parent.fire("blur").fire("blur:composer");
     });
-    
+
     if (wysihtml5.browser.isIos()) {
       // When on iPad/iPhone/IPod after clicking outside of editor, the editor loses focus
       // but the UI still acts as if the editor has focus (blinking caret and onscreen keyboard visible)
@@ -73,7 +73,7 @@
         }
         input.focus();
         input.parentNode.removeChild(input);
-        
+
         window.scrollTo(originalScrollLeft, originalScrollTop);
       });
     }
@@ -131,7 +131,7 @@
         }
       });
     }
-    
+
     // --------- Shortcut logic ---------
     dom.observe(element, "keydown", function(event) {
       var keyCode  = event.keyCode,
@@ -166,7 +166,7 @@
       IMG: "Image: ",
       A:   "Link: "
     };
-    
+
     dom.observe(element, "mouseover", function(event) {
       var target   = event.target,
           nodeName = target.nodeName,

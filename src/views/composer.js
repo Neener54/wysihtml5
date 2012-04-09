@@ -1,7 +1,7 @@
 (function(wysihtml5) {
   var dom       = wysihtml5.dom,
       browser   = wysihtml5.browser;
-  
+
   wysihtml5.views.Composer = wysihtml5.views.View.extend(
     /** @scope wysihtml5.views.Composer.prototype */ {
     name: "composer",
@@ -21,7 +21,7 @@
 
     getValue: function(parse) {
       var value = this.isEmpty() ? "" : wysihtml5.quirks.getCorrectInnerHTML(this.element);
-      
+
       if (parse) {
         value = this.parent.parse(value);
       }
@@ -74,9 +74,9 @@
       if (wysihtml5.browser.doesAsyncFocus() && this.hasPlaceholderSet()) {
         this.clear();
       }
-      
+
       this.base();
-      
+
       var lastChild = this.element.lastChild;
       if (setToEnd && lastChild) {
         if (lastChild.nodeName === "BR") {
@@ -98,7 +98,7 @@
     isEmpty: function() {
       var innerHTML               = this.element.innerHTML,
           elementsWithVisualValue = "blockquote, ul, ol, img, embed, object, table, iframe, svg, video, audio, button, input, select, textarea";
-      return innerHTML === ""              || 
+      return innerHTML === ""              ||
              innerHTML === this.CARET_HACK ||
              this.hasPlaceholderSet()      ||
              (this.getTextContent() === "" && !this.element.querySelector(elementsWithVisualValue));
@@ -106,7 +106,7 @@
 
     _initSandbox: function() {
       var that = this;
-      
+
       this.sandbox = new dom.Sandbox(function() {
         that._create();
       }, {
@@ -128,23 +128,23 @@
 
     _create: function() {
       var that = this;
-      
+
       this.doc                = this.sandbox.getDocument();
       this.element            = this.doc.body;
       this.textarea           = this.parent.textarea;
       this.element.innerHTML  = this.textarea.getValue(true);
       this.enable();
-      
+
       // Make sure our selection handler is ready
       this.selection = new wysihtml5.Selection(this.parent);
-      
+
       // Make sure commands dispatcher is ready
       this.commands  = new wysihtml5.Commands(this.parent);
 
       dom.copyAttributes([
         "className", "spellcheck", "title", "lang", "dir", "accessKey"
       ]).from(this.textarea.element).to(this.element);
-      
+
       dom.addClass(this.element, this.config.composerClassName);
 
       // Make the editor look like the original textarea, by syncing styles
@@ -167,7 +167,7 @@
       if (placeholderText) {
         dom.simulatePlaceholder(this.parent, this, placeholderText);
       }
-      
+
       // Make sure that the browser avoids using inline styles whenever possible
       this.commands.exec("styleWithCSS", false);
 
@@ -275,9 +275,9 @@
       var properties        = ["width", "height"],
           propertiesLength  = properties.length,
           element           = this.element;
-      
+
       this.commands.exec("enableObjectResizing", this.config.allowObjectResizing);
-      
+
       if (this.config.allowObjectResizing) {
          // IE sets inline styles after resizing objects
          // The following lines make sure that the width/height css properties
@@ -305,7 +305,7 @@
         }
       }
     },
-    
+
     _initUndoManager: function() {
       new wysihtml5.UndoManager(this.parent);
     }

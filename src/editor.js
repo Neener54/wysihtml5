@@ -29,9 +29,9 @@
  */
 (function(wysihtml5) {
   var undef;
-  
+
   var defaultConfig = {
-    // Give the editor a name, the name will also be set as class name on the iframe and on the iframe's body 
+    // Give the editor a name, the name will also be set as class name on the iframe and on the iframe's body
     name:                 undef,
     // Whether the editor should look like the textarea (by adopting styles)
     style:                true,
@@ -57,7 +57,7 @@
     // Whether the rich text editor should be rendered on touch devices (wysihtml5 >= 0.3.0 comes with basic support for iOS 5)
     supportTouchDevices:  true
   };
-  
+
   wysihtml5.Editor = wysihtml5.lang.Dispatcher.extend(
     /** @scope wysihtml5.Editor.prototype */ {
     constructor: function(textareaElement, config) {
@@ -66,36 +66,36 @@
       this.textarea         = new wysihtml5.views.Textarea(this, this.textareaElement, this.config);
       this.currentView      = this.textarea;
       this._isCompatible    = wysihtml5.browser.supported();
-      
+
       // Sort out unsupported/unwanted browsers here
       if (!this._isCompatible || (!this.config.supportTouchDevices && wysihtml5.browser.isTouchDevice())) {
         var that = this;
         setTimeout(function() { that.fire("beforeload").fire("load"); }, 0);
         return;
       }
-      
+
       // Add class name to body, to indicate that the editor is supported
       wysihtml5.dom.addClass(document.body, this.config.bodyClassName);
-      
+
       this.composer = new wysihtml5.views.Composer(this, this.textareaElement, this.config);
       this.currentView = this.composer;
-      
+
       if (typeof(this.config.parser) === "function") {
         this._initParser();
       }
-      
+
       this.observe("beforeload", function() {
         this.synchronizer = new wysihtml5.views.Synchronizer(this, this.textarea, this.composer);
         if (this.config.toolbar) {
           this.toolbar = new wysihtml5.toolbar.Toolbar(this, this.config.toolbar);
         }
       });
-      
+
       try {
         console.log("Heya! This page is using wysihtml5 for rich text editing. Check out https://github.com/xing/wysihtml5");
       } catch(e) {}
     },
-    
+
     isCompatible: function() {
       return this._isCompatible;
     },
@@ -129,7 +129,7 @@
       this.currentView.disable();
       return this;
     },
-    
+
     /**
      * Activate editor
      */
@@ -137,15 +137,15 @@
       this.currentView.enable();
       return this;
     },
-    
+
     isEmpty: function() {
       return this.currentView.isEmpty();
     },
-    
+
     hasPlaceholderSet: function() {
       return this.currentView.hasPlaceholderSet();
     },
-    
+
     parse: function(htmlOrElement) {
       var returnValue = this.config.parser(htmlOrElement, this.config.parserRules, this.composer.sandbox.getDocument(), true);
       if (typeof(htmlOrElement) === "object") {
@@ -153,7 +153,7 @@
       }
       return returnValue;
     },
-    
+
     /**
      * Prepare html parser logic
      *  - Observes for paste and drop
@@ -167,13 +167,21 @@
           that.parse(that.composer.element);
         }, keepScrollPosition);
       });
-      
+
       this.observe("paste:textarea", function() {
         var value   = this.textarea.getValue(),
             newValue;
         newValue = this.parse(value);
         this.textarea.setValue(newValue);
       });
+
+      this.observe("focus:composer", function(){
+        var that = this;
+        if (that.currentView.isEmpty()){
+          that.composer.commands.exec("formatBlock", "P");
+        }
+      });
+
     }
   });
 })(wysihtml5);

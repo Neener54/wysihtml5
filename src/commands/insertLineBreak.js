@@ -4,7 +4,7 @@
 
   wysihtml5.commands.insertLineBreak = {
     exec: function(composer, command) {
-      wysihtml5.commands.formatBlock.exec(composer, "formatBlock", "P", null, null);
+      wysihtml5.commands.formatBlock.exec(composer, "formatBlock", "P");
     },
 
     state: function() {
