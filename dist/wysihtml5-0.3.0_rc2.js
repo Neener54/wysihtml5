@@ -7457,8 +7457,9 @@ wysihtml5.Commands = Base.extend(
           composer.commands.exec("insertHTML", LINE_BREAK);
         }
       }else{
+        composer.commands.exec("insertHTML", LINE_BREAK);
         wysihtml5.commands.formatBlock.exec(composer, "formatBlock", composer.config.breakElement);
-        composer.commands.exec("insertHTML", LINE_BREAK)
+        composer.commands.exec("insertHTML", LINE_BREAK);
       }
     },
 
@@ -9384,6 +9385,16 @@ wysihtml5.views.Textarea = wysihtml5.views.View.extend(
       try {
         console.log("Heya! This page is using wysihtml5 for rich text editing. Check out https://github.com/xing/wysihtml5");
       } catch(e) {}
+
+      this.observe("focus:composer", function () {
+        var that = this;
+        if (that.currentView.isEmpty() && that.config.breakElement !== null) {
+          setTimeout(function () {
+            that.currentView.commands.exec("formatBlock", that.config.breakElement);
+            that.currentView.commands.exec("insertHTML", "<br>");
+          }, 40);
+        }
+      });
     },
 
     isCompatible: function() {

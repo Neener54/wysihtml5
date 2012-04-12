@@ -14,8 +14,9 @@
           composer.commands.exec("insertHTML", LINE_BREAK);
         }
       }else{
+        composer.commands.exec("insertHTML", LINE_BREAK);
         wysihtml5.commands.formatBlock.exec(composer, "formatBlock", composer.config.breakElement);
-        composer.commands.exec("insertHTML", LINE_BREAK)
+        composer.commands.exec("insertHTML", LINE_BREAK);
       }
     },
 

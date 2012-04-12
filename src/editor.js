@@ -96,6 +96,16 @@
       try {
         console.log("Heya! This page is using wysihtml5 for rich text editing. Check out https://github.com/xing/wysihtml5");
       } catch(e) {}
+
+      this.observe("focus:composer", function () {
+        var that = this;
+        if (that.currentView.isEmpty() && that.config.breakElement !== null) {
+          setTimeout(function () {
+            that.currentView.commands.exec("formatBlock", that.config.breakElement);
+            that.currentView.commands.exec("insertHTML", "<br>");
+          }, 40);
+        }
+      });
     },
 
     isCompatible: function() {
