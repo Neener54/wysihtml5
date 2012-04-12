@@ -32,28 +32,30 @@
 
   var defaultConfig = {
     // Give the editor a name, the name will also be set as class name on the iframe and on the iframe's body
-    name:                 undef,
+    name:                     undef,
     // Whether the editor should look like the textarea (by adopting styles)
-    style:                true,
+    style:                    true,
     // Id of the toolbar element, pass falsey value if you don't want any toolbar logic
-    toolbar:              undef,
+    toolbar:                  undef,
     // Whether urls, entered by the user should automatically become clickable-links
-    autoLink:             true,
+    autoLink:                 true,
     // Object which includes parser rules to apply when html gets inserted via copy & paste
     // See parser_rules/*.js for examples
-    parserRules:          { tags: { br: {}, span: {}, div: {}, p: {} }, classes: {} },
+    parserRules:              { tags: { br: {}, span: {}, div: {}, p: {} }, classes: {} },
     // Parser method to use when the user inserts content via copy & paste
-    parser:               wysihtml5.dom.parse,
+    parser:                 wysihtml5.dom.parse,
     // Class name which should be set on the contentEditable element in the created sandbox iframe, can be styled via the 'stylesheets' option
     composerClassName:    "wysihtml5-editor",
     // Class name to add to the body when the wysihtml5 editor is supported
-    bodyClassName:        "wysihtml5-supported",
+    bodyClassName:          "wysihtml5-supported",
     // Array (or single string) of stylesheet urls to be loaded in the editor's iframe
-    stylesheets:          [],
+    stylesheets:              [],
     // Placeholder text to use, defaults to the placeholder attribute on the textarea element
-    placeholderText:      undef,
+    placeholderText:        undef,
     // Whether the composer should allow the user to manually resize images, tables etc.
-    allowObjectResizing:  true,
+    allowObjectResizing:    true,
+    // Set the line break tag
+    breakElement:         null, 
     // Whether the rich text editor should be rendered on touch devices (wysihtml5 >= 0.3.0 comes with basic support for iOS 5)
     supportTouchDevices:  true
   };

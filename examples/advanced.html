@@ -139,7 +139,8 @@
   var editor = new wysihtml5.Editor("textarea", {
     toolbar:      "toolbar",
     stylesheets:  "css/stylesheet.css",
-    parserRules:  wysihtml5ParserRules
+    parserRules:  wysihtml5ParserRules,
+    breakElement: 'div'
   });
   
   var log = document.getElementById("log");
