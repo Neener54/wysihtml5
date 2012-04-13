@@ -101,8 +101,7 @@
         var that = this;
         if (that.currentView.isEmpty() && that.config.breakElement !== null) {
           setTimeout(function () {
-            that.currentView.commands.exec("formatBlock", that.config.breakElement);
-            that.currentView.commands.exec("insertHTML", "<br>");
+            that.currentView.commands.exec("insertLineBreak");
           }, 40);
         }
       });

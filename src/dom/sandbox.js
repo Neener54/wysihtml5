@@ -218,7 +218,7 @@
       return wysihtml5.lang.string(
         '<!DOCTYPE html><html><head>'
         + '<meta charset="#{charset}">#{stylesheets}</head>'
-        + '<body><p class="wysihtml5-first"></p></body></html>'
+        + '<body></body></html>'
       ).interpolate(templateVars);
     },
 

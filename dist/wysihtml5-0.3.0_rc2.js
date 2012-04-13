@@ -5493,7 +5493,7 @@ wysihtml5.dom.replaceWithChildNodes = function(node) {
       return wysihtml5.lang.string(
         '<!DOCTYPE html><html><head>'
         + '<meta charset="#{charset}">#{stylesheets}</head>'
-        + '<body><p class="wysihtml5-first"></p></body></html>'
+        + '<body></body></html>'
       ).interpolate(templateVars);
     },
 
@@ -5792,7 +5792,7 @@ wysihtml5.quirks.cleanPastedHTML = (function() {
  */
 (function(wysihtml5) {
   var dom                                           = wysihtml5.dom,
-      USE_NATIVE_LINE_BREAK_WHEN_CARET_INSIDE_TAGS  = ["LI", "P", "H1", "H2", "H3", "H4", "H5", "H6"],
+      USE_NATIVE_LINE_BREAK_WHEN_CARET_INSIDE_TAGS  = ["LI", "P", "H1", "H2", "H3", "H4", "H5", "H6","DIV"],
       LIST_TAGS                                     = ["UL", "OL", "MENU"];
   
   wysihtml5.quirks.insertLineBreakOnReturn = function(composer) {
@@ -5848,7 +5848,7 @@ wysihtml5.quirks.cleanPastedHTML = (function() {
       }
 
       if (keyCode === wysihtml5.ENTER_KEY && !wysihtml5.browser.insertsLineBreaksOnReturn()) {
-        composer.commands.exec("insertLineBreak");
+        composer.selection.surround(document.createElement(composer.config.breakElement));
         event.preventDefault();
       }
     }
@@ -7154,7 +7154,8 @@ wysihtml5.Commands = Base.extend(
       var doc          = composer.doc,
           blockElement = this.state(composer, command, nodeName, className, classRegExp),
           selectedNode;
-
+          console.log('formatBlock');
+          console.log(composer.config);
       nodeName = typeof(nodeName) === "string" ? nodeName.toUpperCase() : nodeName;
 
       if (blockElement) {
@@ -7447,6 +7448,7 @@ wysihtml5.Commands = Base.extend(
 
   wysihtml5.commands.insertLineBreak = {
     exec: function(composer, command) {
+      console.log(composer.config);
       if (composer.config.breakElement === null){
         if (composer.commands.support(command)) {
           composer.doc.execCommand(command, false, null);
@@ -7457,6 +7459,7 @@ wysihtml5.Commands = Base.extend(
           composer.commands.exec("insertHTML", LINE_BREAK);
         }
       }else{
+        console.log(composer.config);
         composer.commands.exec("insertHTML", LINE_BREAK);
         wysihtml5.commands.formatBlock.exec(composer, "formatBlock", composer.config.breakElement);
         composer.commands.exec("insertHTML", LINE_BREAK);
@@ -9390,8 +9393,7 @@ wysihtml5.views.Textarea = wysihtml5.views.View.extend(
         var that = this;
         if (that.currentView.isEmpty() && that.config.breakElement !== null) {
           setTimeout(function () {
-            that.currentView.commands.exec("formatBlock", that.config.breakElement);
-            that.currentView.commands.exec("insertHTML", "<br>");
+            that.currentView.commands.exec("insertLineBreak");
           }, 40);
         }
       });

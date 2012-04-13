@@ -11,7 +11,7 @@
  */
 (function(wysihtml5) {
   var dom                                           = wysihtml5.dom,
-      USE_NATIVE_LINE_BREAK_WHEN_CARET_INSIDE_TAGS  = ["LI", "P", "H1", "H2", "H3", "H4", "H5", "H6"],
+      USE_NATIVE_LINE_BREAK_WHEN_CARET_INSIDE_TAGS  = ["LI", "P", "H1", "H2", "H3", "H4", "H5", "H6","DIV"],
       LIST_TAGS                                     = ["UL", "OL", "MENU"];
   
   wysihtml5.quirks.insertLineBreakOnReturn = function(composer) {
@@ -67,7 +67,7 @@
       }
 
       if (keyCode === wysihtml5.ENTER_KEY && !wysihtml5.browser.insertsLineBreaksOnReturn()) {
-        composer.commands.exec("insertLineBreak");
+        composer.selection.surround(document.createElement(composer.config.breakElement));
         event.preventDefault();
       }
     }
