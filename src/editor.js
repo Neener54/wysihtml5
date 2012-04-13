@@ -185,14 +185,6 @@
         newValue = this.parse(value);
         this.textarea.setValue(newValue);
       });
-
-      this.observe("focus:composer", function(){
-        var that = this;
-        if (that.currentView.isEmpty()){
-          that.composer.commands.exec("formatBlock", "P");
-        }
-      });
-
     }
   });
 })(wysihtml5);
