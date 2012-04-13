@@ -96,7 +96,7 @@ wysihtml5.browser = (function() {
      * Whether the browser inserts a <br> when pressing enter in a contentEditable element
      */
     insertsLineBreaksOnReturn: function() {
-      return isGecko;
+      return false;
     },
 
     supportsPlaceholderAttributeOn: function(element) {

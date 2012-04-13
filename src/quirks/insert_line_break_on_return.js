@@ -61,13 +61,16 @@
         } else if (blockElement.nodeName.match(/H[1-6]/) && keyCode === wysihtml5.ENTER_KEY) {
           setTimeout(function() {
             unwrap(composer.selection.getSelectedNode());
+            console.log('unwrap');
           }, 0);
         } 
         return;
       }
 
       if (keyCode === wysihtml5.ENTER_KEY && !wysihtml5.browser.insertsLineBreaksOnReturn()) {
-        composer.selection.surround(document.createElement(composer.config.breakElement));
+      	composer.commands.exec( "formatBlock", composer.config.breakElement);
+      	composer.commands.exec("insertHTML", "<br>");
+        	composer.selection.surround(document.createElement(composer.config.breakElement));
         event.preventDefault();
       }
     }

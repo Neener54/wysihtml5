@@ -3479,7 +3479,7 @@ wysihtml5.browser = (function() {
      * Whether the browser inserts a <br> when pressing enter in a contentEditable element
      */
     insertsLineBreaksOnReturn: function() {
-      return isGecko;
+      return false;
     },
 
     supportsPlaceholderAttributeOn: function(element) {
@@ -4745,7 +4745,6 @@ wysihtml5.dom.parse = (function() {
    * which later replaces the entire body content
    */
   function parse(elementOrHtml, rules, context, cleanUp) {
-    console.log('parsing');
     wysihtml5.lang.object(currentRules).merge(defaultRules).merge(rules).get();
 
     context           = context || elementOrHtml.ownerDocument || document;
@@ -5842,13 +5841,16 @@ wysihtml5.quirks.cleanPastedHTML = (function() {
         } else if (blockElement.nodeName.match(/H[1-6]/) && keyCode === wysihtml5.ENTER_KEY) {
           setTimeout(function() {
             unwrap(composer.selection.getSelectedNode());
+            console.log('unwrap');
           }, 0);
         } 
         return;
       }
 
       if (keyCode === wysihtml5.ENTER_KEY && !wysihtml5.browser.insertsLineBreaksOnReturn()) {
-        composer.selection.surround(document.createElement(composer.config.breakElement));
+      	composer.commands.exec( "formatBlock", composer.config.breakElement);
+      	composer.commands.exec("insertHTML", "<br>");
+        	composer.selection.surround(document.createElement(composer.config.breakElement));
         event.preventDefault();
       }
     }
@@ -7154,8 +7156,6 @@ wysihtml5.Commands = Base.extend(
       var doc          = composer.doc,
           blockElement = this.state(composer, command, nodeName, className, classRegExp),
           selectedNode;
-          console.log('formatBlock');
-          console.log(composer.config);
       nodeName = typeof(nodeName) === "string" ? nodeName.toUpperCase() : nodeName;
 
       if (blockElement) {
@@ -7448,7 +7448,7 @@ wysihtml5.Commands = Base.extend(
 
   wysihtml5.commands.insertLineBreak = {
     exec: function(composer, command) {
-      console.log(composer.config);
+      console.log(composer.config.breakElement);
       if (composer.config.breakElement === null){
         if (composer.commands.support(command)) {
           composer.doc.execCommand(command, false, null);
@@ -7459,8 +7459,7 @@ wysihtml5.Commands = Base.extend(
           composer.commands.exec("insertHTML", LINE_BREAK);
         }
       }else{
-        console.log(composer.config);
-        composer.commands.exec("insertHTML", LINE_BREAK);
+        console.log('formatting Block in ilb');
         wysihtml5.commands.formatBlock.exec(composer, "formatBlock", composer.config.breakElement);
         composer.commands.exec("insertHTML", LINE_BREAK);
       }
@@ -9389,11 +9388,11 @@ wysihtml5.views.Textarea = wysihtml5.views.View.extend(
         console.log("Heya! This page is using wysihtml5 for rich text editing. Check out https://github.com/xing/wysihtml5");
       } catch(e) {}
 
-      this.observe("focus:composer", function () {
+      this.observe("load:composer", function () {
         var that = this;
         if (that.currentView.isEmpty() && that.config.breakElement !== null) {
           setTimeout(function () {
-            that.currentView.commands.exec("insertLineBreak");
+            that.currentView.commands.exec("formatBlock",  that.composer.config.breakElement );
           }, 40);
         }
       });

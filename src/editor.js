@@ -97,11 +97,11 @@
         console.log("Heya! This page is using wysihtml5 for rich text editing. Check out https://github.com/xing/wysihtml5");
       } catch(e) {}
 
-      this.observe("focus:composer", function () {
+      this.observe("load:composer", function () {
         var that = this;
         if (that.currentView.isEmpty() && that.config.breakElement !== null) {
           setTimeout(function () {
-            that.currentView.commands.exec("insertLineBreak");
+            that.currentView.commands.exec("formatBlock",  that.composer.config.breakElement );
           }, 40);
         }
       });

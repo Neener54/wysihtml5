@@ -154,8 +154,6 @@
       var doc          = composer.doc,
           blockElement = this.state(composer, command, nodeName, className, classRegExp),
           selectedNode;
-          console.log('formatBlock');
-          console.log(composer.config);
       nodeName = typeof(nodeName) === "string" ? nodeName.toUpperCase() : nodeName;
 
       if (blockElement) {

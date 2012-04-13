@@ -4,7 +4,7 @@
 
   wysihtml5.commands.insertLineBreak = {
     exec: function(composer, command) {
-      console.log(composer.config);
+      console.log(composer.config.breakElement);
       if (composer.config.breakElement === null){
         if (composer.commands.support(command)) {
           composer.doc.execCommand(command, false, null);
@@ -15,8 +15,7 @@
           composer.commands.exec("insertHTML", LINE_BREAK);
         }
       }else{
-        console.log(composer.config);
-        composer.commands.exec("insertHTML", LINE_BREAK);
+        console.log('formatting Block in ilb');
         wysihtml5.commands.formatBlock.exec(composer, "formatBlock", composer.config.breakElement);
         composer.commands.exec("insertHTML", LINE_BREAK);
       }
